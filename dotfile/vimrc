@@ -30,8 +30,9 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugin for wrapping a selection
 Plugin 'tpope/vim-surround'
-" Plugin
+" Plugin YouCompleteMe
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 
 " Plugin for commenting and uncommenting lines of code in all languages
 " supported by Vim
@@ -48,8 +49,15 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 call vundle#end()		" required
 filetype plugin indent on	" required
 
-let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
-let g:ycm_always_populate_location_list=1
+" let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+" let g:ycm_always_populate_location_list=1
+" let g:ycm_clangd_binary_path = '/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/clangd/output/clangd'
+" Because ycm core built with python 2
+let g:ycm_server_python_interpreter = '/usr/bin/python2'
+" Set loglevel to debug when ycm fail to print debug info to file
+" let g:ycm_server_log_level = 'debug'
+let g:ycm_confirm_extra_conf = 0
+
 highlight YcmErrorSection guibg=#f7dc6f
 highlight YcmWarningSection guibg=#f7dc6f
 highlight YcmWarningLine guibg=#f7dc6f
@@ -73,7 +81,7 @@ nnoremap <silent> ]B :blast<CR>
 " inoremap ' ''<left>
 " inoremap ( ()<left>
 " inoremap [ []<left>
-inoremap { {}<left>
+" inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 
