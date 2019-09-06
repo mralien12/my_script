@@ -2,7 +2,8 @@
 
 if [ $# -ne 1 ]; then
         echo "Usage: $0 your_board_defconfig"
-	echo "Ex: $0 xilinx_zynq_defconfig"
+	echo "	Ex: $0 xilinx_zynq_defconfig"
+	echo "	Ex: $0 picozed_defconfig"
         exit
 fi
 
@@ -17,6 +18,12 @@ export CROSS_COMPILE=arm-linux-gnueabihf-
 #source ~/xilinx/2018.2/settings.sh
 make $1
 make -j ${CORE_NUM}
+
+retVal=$?
+if [ $retVal -ne 0 ];then
+	echo "Failed to build kernel!!"
+	exit
+fi
 
 cp ./arch/${ARCH}/boot/zImage ../user-image
 ret=$?
