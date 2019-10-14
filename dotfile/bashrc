@@ -134,3 +134,4 @@ export out=/home/hoa/workspace/hgs1000s/out/target/product/hgs1000s/
 # added by Anaconda3 installer
 #export PATH="/home/hoa/anaconda3/bin:$PATH"
 alias vi="vim"
+alias sl="ls"
