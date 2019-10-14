@@ -1,8 +1,13 @@
 #!/bin/bash
 
+VERSION=1.0.1
 # PATH=$PATH:/home/quyencv/xilinx/2018.2/tools/hsm/bin
-PATH=$PATH:~/tools/hsm/bin
-PATH=$PATH:~/tools/dtc
+
+# Provide path to xsdk tool
+PATH=$PATH:/opt/Petalinux/2018.3/tools/xsct/SDK/2018.3/bin
+# Provide path to dtc tool
+PATH=$PATH:/opt/Petalinux/2018.3/tools/linux-i386/petalinux/bin
+
 ROOT_DIR=$PWD
 PARENT_DIR="$(dirname "$ROOT_DIR")"
 KERNEL_INC=${PARENT_DIR}/linux-xlnx/include
@@ -10,9 +15,12 @@ KERNEL_INC=${PARENT_DIR}/linux-xlnx/include
 SRC_DIR=$ROOT_DIR/device-tree
 USER_DT_DIR=$ROOT_DIR/user-dt
 
+# CPU_PROC=ps7_cortexa9_0	# Zynq
+CPU_PROC=psu_cortexa53_0	# Zynqmp
+
 BuildDeviceTree() {
         gcc  -E -nostdinc -Ulinux -I$KERNEL_INC -I$SRC_DIR -I$USER_DT_DIR \
-		-x assembler-with-cpp -o ${USER_DT_DIR}/system-top.pp ${USER_DT_DIR}/system-user.dtsi
+		-x assembler-with-cpp -o ${USER_DT_DIR}/system-top.pp ${USER_DT_DIR}/system-user.dts
 	ret=$?
 	if [ $ret -ne 0 ];then
 		echo "BuildDeviceTree: Failed to compile by gcc"
@@ -68,9 +76,7 @@ if [ "$1" == "--hdf" ]; then
 	fi
 
 	mkdir device-tree
-	xsdk -batch -source tcl/run_hsi_cmds.tcl
-
-	# echo '#include "system-user.dtsi"' >> ${SRC_DIR}/system-top.dts
+	xsdk -batch -source tcl/run_hsi_cmds.tcl $CPU_PROC
 fi
 ret=$?
 if [ $ret -ne 0 ]; then
@@ -86,10 +92,10 @@ ret=$?
 if [ $ret -ne 0 ]; then
         exit $ret
 fi
-echo "DTS/DTSI/DTB is in device-tree"
+echo "${USER_DT_DIR}/system.dtb is created"
 
 cp ${USER_DT_DIR}/system.dtb ../user-image
-echo "Copy ${USER_DT_DIR}/system.dtb to ../user-image sucesfully"
+echo "Copy system.dtb to ${PARENT_DIR}/user-image sucesfully!!!"
 
 
 if [ "$1" == "--update" -o "$3" == "--update" ]; then
